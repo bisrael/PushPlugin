@@ -27,6 +27,14 @@
 #import <Cordova/CDV.h>
 #import <Cordova/CDVPlugin.h>
 
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+#define AT_LEAST_IOS8 true
+#else
+#define LESS_THAN_IOS8
+#endif
+
 @interface PushPlugin : CDVPlugin
 {
     NSDictionary *notificationMessage;
@@ -51,5 +59,6 @@
 
 - (void)setNotificationMessage:(NSDictionary *)notification;
 - (void)notificationReceived;
++ (bool)getBoolValueFor:(id)id;
 
 @end
