@@ -102,8 +102,11 @@ public class GCMIntentService extends GCMBaseIntentService {
                         .setDefaults(defaults)
                         .setSmallIcon(context.getApplicationInfo().icon)
                         .setWhen(System.currentTimeMillis())
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
                         .setContentTitle(extras.getString("title"))
                         .setTicker(extras.getString("title"))
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setLights(0xFF8021B3, 700, 700)
                         .setContentIntent(contentIntent)
                         .setAutoCancel(true);
 
@@ -121,13 +124,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         String soundName = extras.getString("sound");
         if (soundName != null) {
-            MediaPlayer player = new MediaPlayer();
-            AssetFileDescriptor file;
             try {
-                file = getAssets().openFd(soundName);
+                AssetFileDescriptor file = getAssets().openFd(soundName);
+
+                MediaPlayer player = new MediaPlayer();
                 player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-                defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE;
-                mBuilder.setDefaults(defaults);
                 player.prepare();
                 player.start();
             } catch (IOException e) {
