@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -144,6 +145,10 @@ public class GCMIntentService extends GCMBaseIntentService {
         } catch (Exception e) {
             Log.e(TAG, "Number format exception - Error parsing Notification ID" + e.getMessage());
         }
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        wl.acquire();
 
         mNotificationManager.notify((String) appName, notId, mBuilder.build());
     }
